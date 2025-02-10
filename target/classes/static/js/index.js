@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
 	$(document).on('click', '#sendMessageButton', function(event) {
+		$(this).attr('disabled', true);
+		$('#loadingIcon').show();
 		sendMessage();
 	});
 	
@@ -8,8 +10,12 @@ $(document).ready(function() {
 
 	function sendMessage() {
 
-		let message = $("#messageWindow").val();
+		let message = $('#messageWindow').val().trim();
+		if(message === "") return;
+		addText("Ty: " + message);
+		$('#messageWindow').val('');
 		
+	
 
 		$.ajax({
 			'url': '/sendMessage',
@@ -18,10 +24,12 @@ $(document).ready(function() {
 			'data': message,
 			'success': function(data) {
 				addText(data);
-				
+				$('#sendMessageButton').attr('disabled', false); //odblokowywuje przycisk
+				$('#loadingIcon').hide();
 			},
 			'error': function(request, status, error) {
-
+                $('#sendMessageButton').attr('disabled', false); //odblokowywuje przycisk
+				$('#loadingIcon').hide();
 			}
 		});
 	}

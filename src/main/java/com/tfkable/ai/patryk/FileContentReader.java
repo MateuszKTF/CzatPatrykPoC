@@ -13,6 +13,7 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.init.ResourceReader;
 import org.springframework.stereotype.Service;
 
@@ -24,24 +25,23 @@ public class FileContentReader {
 //	ćwiczenia:
 //
 //	1 zablokuj przycisk po kliknięciu, odblokuj kiedy przyjdzie odpowiedź
-//	  użyj attr("disabled",true) i attr("disabled",false)
+//	  użyj attr("disabled",true) i attr("disabled",false) ZROBIONE
 //	2 pokaż ikonę ładowania w czasie oczekiwania na odpowiedź serwera, ukryj po otrzymaniu odpowiedzi
-//	  użyj metod jquery show() i hide()
-//	3 dodaj pytania użytkownika do głównego okna czatu, na podobnej zasadzie jak odpowiedzi serwera
-//	3 stwórz klasę typu serwis i przenieś tam logikę komunikacji z LLM
-//	4 wyciągnij obiekty do komunikacji z modelem poza metodę
-//	5 wyciągnij logikę oczytywania plików do metody init
-//	6 wyciągnij zmienne typu String z metod do poziomu klasy (zmienne instancji)
-//	7 spróbuj udoskonalić promp żeby pokazywał z którego źródła ma inforacje i żeby udzielał bardziej precyzyjnej odpowiedzi
+//	  użyj metod jquery show() i hide()  ZROBIONE
+//	3 dodaj pytania użytkownika do głównego okna czatu, na podobnej zasadzie jak odpowiedzi serwera ZROBIONE
+//	3 stwórz klasę typu serwis i przenieś tam logikę komunikacji z LLM ZROBIONE
+//	4 wyciągnij obiekty do komunikacji z modelem poza metodę ZROBIONE
+//	5 wyciągnij logikę oczytywania plików do metody init ZROBIONE
+//	6 wyciągnij zmienne typu String z metod do poziomu klasy (zmienne instancji) ZROBIONE ?
+//	7 spróbuj udoskonalić promp żeby pokazywał z którego źródła ma inforacje i żeby udzielał bardziej precyzyjnej odpowiedzi ZROBIONE
 //
 //	na luzie, później to zrobimy wspólnie
 
     public List<Document> readFilesFromDirectory() throws IOException {
     	
-    	String directoryPath = "pliki"; 
-        URL resource = ResourceReader.class.getClassLoader().getResource(directoryPath);
-    	
-        File directory = new File(resource.getFile());
+    	String directoryPath = "/pliki/";
+
+        File directory = new ClassPathResource("pliki/").getFile();
         List<Document> documents = new ArrayList<>();
 
         if (!directory.isDirectory()) {
