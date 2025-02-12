@@ -39,9 +39,9 @@ public class FileContentReader {
 
     public List<Document> readFilesFromDirectory() throws IOException {
     	
-    	String directoryPath = "/pliki/";
+    	String directoryPath = "/translated/";
 
-        File directory = new ClassPathResource("pliki/").getFile();
+        File directory = new ClassPathResource(directoryPath).getFile();
         List<Document> documents = new ArrayList<>();
 
         if (!directory.isDirectory()) {

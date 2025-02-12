@@ -1,6 +1,7 @@
 package com.tfkable.ai.patryk;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class LLMService {
 		this.fileContentReader = fileContentReader;
 		
 		this.chatModel = OllamaChatModel.builder()
+				.timeout(Duration.ofMinutes(1L))
 				.baseUrl(modelUrl)
 				.modelName(modelName)
 				.build();
@@ -62,6 +64,7 @@ public class LLMService {
 				.chatLanguageModel(chatModel)
 				.retriever(EmbeddingStoreRetriever.from(embeddingStore, embeddingModel))
 				.build();
+		
 	}
 	
 	public String sendMessageToLLM(String question) {

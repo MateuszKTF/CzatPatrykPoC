@@ -3,6 +3,7 @@ package com.tfkable.ai.patryk;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
  
 import javax.annotation.PostConstruct;
@@ -38,12 +39,23 @@ public class PatrykController3 {
 	@Autowired
 	private TextService textService;
 	
+	private final String modelUrl = "http://localhost:11434";
+	private final String modelName = "mistral";
+	
 	private List<Document> documents;
 	private final String questionTemplate = "Twoim zadaniem jest odpowiedzenie na pytanie wyłącznie na podstawie podanych dokumentów. "
 			+ "W każdej odpowiedzi musisz wskazać źródło (nazwę dokumentu), z którego pochodzi informacja. "
 			+ "Jeśli znajdziesz informacje w kilku dokumentach, podziel je pustą linią i zaznacz źrodło każdej części. \n\n"
+			+ "Zawsze odpowiadaj po Polsku. \n\n"
 			+ "Podawaj tylko najistotniejsze informacje, bez zbędnych szczegółów.\n\n "
 			+ "Pytanie: ";
+	
+	
+	ChatLanguageModel chatModel = OllamaChatModel.builder()
+			.timeout(Duration.ofMinutes(1L))
+			.baseUrl(modelUrl)
+			.modelName(modelName)
+			.build();
  
 	@RequestMapping("/index")
 	public String index() {
@@ -59,15 +71,22 @@ public class PatrykController3 {
 //		} catch (IOException e) {
 //			System.out.println("Błąd odczytu plików: " + e.getMessage());
 //		}
-		try {
-			List<String> initExtractPdf = textService.extractPdf("C:\\Users\\mateusz.kotowicz\\Desktop\\Projekty Java\\czatPatrykaPoCv2\\src\\main\\resources\\pliki\\zajaczek.pdf");
-			initExtractPdf.stream().forEach(s -> System.out.println(s));
-			List<String> initTranslatedPdfList = textService.translatePDF(initExtractPdf);
-		}catch (IOException e) {
-			System.out.println("Błąd" + e);
-		}
+//		try {
+//			List<String> initExtractPdf = textService.extractPdf("C:\\Users\\mateusz.kotowicz\\Desktop\\Projekty Java\\czatPatrykaPoCv2\\src\\main\\resources\\pliki\\zajaczek.pdf");
+//			initExtractPdf.stream().forEach(s -> System.out.println(s));
+//			List<String> initTranslatedPdfList = textService.translatePDF(initExtractPdf);
+//			textService.createPdf2(initTranslatedPdfList, "C:\\Users\\mateusz.kotowicz\\Desktop\\Projekty Java\\czatPatrykaPoCv2\\src\\main\\resources\\pliki");
+//		}catch (IOException e) {
+//			System.out.println("Błąd" + e);
+//		}
 		
 		
+	}
+	
+	@RequestMapping("/ask")
+	@ResponseBody
+	public String ask() {
+		return chatModel.generate("Jak sie masz?");
 	}
  
 	@RequestMapping("/sendMessage")
